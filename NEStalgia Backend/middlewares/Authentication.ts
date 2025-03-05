@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
-// Tipagem para o `user` que será adicionado ao `req`
 interface CustomRequest extends Request {
   user?: {
     id: string;
