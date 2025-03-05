@@ -3,12 +3,15 @@ import dotenv from "dotenv";
 import sequelize from "./config/db";
 import authRouter from "./routes/AuthRouter";
 import User from "./models/User";
+import romsRouter from "./routes/RomsRouter";
 
 dotenv.config();
 const app = express();
 
 app.use(express.json());
-app.use("/", authRouter);
+
+app.use("/auth", authRouter);
+app.use("/roms", romsRouter);
 
 const start = async () => {
   try {
