@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import sequelize from "./config/db";
 import authRouter from "./routes/AuthRouter";
 import User from "./models/User";
+import Game from "./models/Game";
 import romsRouter from "./routes/RomsRouter";
 
 dotenv.config();
@@ -17,6 +18,10 @@ const start = async () => {
   try {
     await sequelize.authenticate();
     console.log("Conexão estabelecida com sucesso.");
+    await Game.destroy({
+      where: {},
+    });
+    console.log("Todos os jogos foram deletados.");
     await sequelize.sync();
     console.log("Modelos sincronizados com sucesso.");
   } catch (error: any) {

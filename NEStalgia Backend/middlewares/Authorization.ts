@@ -12,7 +12,7 @@ export const isAdmin = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  if (!req.user || req.user.id !== "admin") {
+  if (!req.user || req.user.role !== "admin") {
     res.status(403).json({
       message:
         "Acesso negado: somente administradores podem realizar esta ação!",

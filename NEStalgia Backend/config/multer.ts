@@ -7,7 +7,10 @@ const multerConfig = multer.diskStorage({
     cb(null, path.resolve(__dirname, "..", "roms"));
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname);
+    const randomName = crypto.randomBytes(16).toString("hex");
+    const fileExtension = path.extname(file.originalname);
+    const uniqueName = `${randomName}${fileExtension}`;
+    cb(null, uniqueName);
   },
 });
 
