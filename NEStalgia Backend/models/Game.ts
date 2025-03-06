@@ -1,5 +1,7 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import db from "../config/db";
+import User from "./User";
+import Favorite from "./Favorite";
 
 interface GameAttributes {
   id: number;
@@ -70,5 +72,11 @@ Game.init(
     modelName: "Game",
   }
 );
+
+Game.belongsToMany(User, {
+  through: Favorite,
+  foreignKey: "gameId",
+  as: "favoritedByUsers",
+});
 
 export default Game;
