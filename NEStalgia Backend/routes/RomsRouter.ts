@@ -1,8 +1,6 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import multer from "multer";
 import multerConfig from "../config/multer";
-import path from "path";
-import fs from "fs";
 import authentication from "../middlewares/Authentication";
 import { isAdmin } from "../middlewares/Authorization";
 import { downloadRom, insertDataGame } from "../controllers/GameController";

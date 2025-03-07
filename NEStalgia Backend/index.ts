@@ -3,8 +3,10 @@ import dotenv from "dotenv";
 import sequelize from "./config/db";
 import authRouter from "./routes/AuthRouter";
 import User from "./models/User";
+import Favorite from "./models/Favorite";
 import Game from "./models/Game";
 import romsRouter from "./routes/RomsRouter";
+import favoriteRouter from "./routes/FavoriteRouter";
 
 dotenv.config();
 const app = express();
@@ -13,6 +15,7 @@ app.use(express.json());
 
 app.use("/auth", authRouter);
 app.use("/roms", romsRouter);
+app.use("/favorites", favoriteRouter);
 
 const start = async () => {
   try {
