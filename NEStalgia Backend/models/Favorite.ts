@@ -43,6 +43,12 @@ Favorite.init(
     modelName: "Favorite",
     tableName: "Favorites",
     timestamps: false,
+    indexes: [
+      {
+        unique: true,
+        fields: ["userId", "gameId"],
+      },
+    ],
   }
 );
 
