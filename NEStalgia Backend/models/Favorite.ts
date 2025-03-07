@@ -28,7 +28,6 @@ Favorite.init(
         key: "id",
       },
       allowNull: false,
-      onDelete: "CASCADE",
     },
     gameId: {
       type: DataTypes.INTEGER,
@@ -37,7 +36,6 @@ Favorite.init(
         key: "id",
       },
       allowNull: false,
-      onDelete: "CASCADE",
     },
   },
   {

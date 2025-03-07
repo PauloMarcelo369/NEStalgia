@@ -58,10 +58,4 @@ User.init(
   }
 );
 
-User.belongsToMany(Game, {
-  through: Favorite,
-  foreignKey: "userId",
-  as: "favoriteGames",
-});
-
 export default User;

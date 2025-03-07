@@ -3,14 +3,15 @@ import dotenv from "dotenv";
 import sequelize from "./config/db";
 import authRouter from "./routes/AuthRouter";
 import User from "./models/User";
-import Favorite from "./models/Favorite";
 import Game from "./models/Game";
+import Favorite from "./models/Favorite";
+import associations from "./models/Associations";
 import romsRouter from "./routes/RomsRouter";
 import favoriteRouter from "./routes/FavoriteRouter";
 
 dotenv.config();
 const app = express();
-
+associations();
 app.use(express.json());
 
 app.use("/auth", authRouter);
