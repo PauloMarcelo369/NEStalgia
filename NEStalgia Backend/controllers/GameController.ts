@@ -51,3 +51,12 @@ export const downloadRom = async (req: Request, res: Response) => {
     }
   });
 };
+
+export const getAllGames = async (req: Request, res: Response) => {
+  try {
+    const games = await GameService.getGames();
+    res.status(200).json(games);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+};

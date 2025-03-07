@@ -8,8 +8,8 @@ import authentication from "../middlewares/Authentication";
 
 const favoriteRouter = express.Router();
 
-favoriteRouter.post("/insert/{gameId}", authentication, insertFavorite);
+favoriteRouter.post("/insert/:gameId", authentication, insertFavorite);
 favoriteRouter.get("/myfavorites", authentication, getAllFavorites);
-favoriteRouter.delete("/delete", authentication, deleteFavorite);
+favoriteRouter.delete("/delete/:gameId", authentication, deleteFavorite);
 
 export default favoriteRouter;

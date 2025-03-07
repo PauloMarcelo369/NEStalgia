@@ -1,20 +1,28 @@
-import Game from "./Game";
-import Favorite from "./Favorite";
-import User from "./User";
-
 const associations = () => {
-  Game.belongsToMany(User, {
-    through: Favorite,
+  const { default: Game } = require("./Game");
+  const { default: User } = require("./User");
+  const { default: Favorite } = require("./Favorite");
+  Game.hasMany(Favorite, {
     foreignKey: "gameId",
-    constraints: true,
     onDelete: "CASCADE",
+    as: "favorites", // A associação será referida como "favorites"
   });
 
-  User.belongsToMany(Game, {
-    through: Favorite,
+  Favorite.belongsTo(Game, {
+    foreignKey: "gameId",
+    as: "Game", // "Game" será acessado diretamente no Favorite
+  });
+
+  // A associação entre User e Favorite
+  User.hasMany(Favorite, {
     foreignKey: "userId",
-    constraints: true,
     onDelete: "CASCADE",
+    as: "favorites", // A associação será referida como "favorites"
+  });
+
+  Favorite.belongsTo(User, {
+    foreignKey: "userId",
+    as: "User", // "User" será acessado diretamente no Favorite
   });
 };
 

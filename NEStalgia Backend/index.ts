@@ -22,9 +22,10 @@ const start = async () => {
   try {
     await sequelize.authenticate();
     console.log("Conexão estabelecida com sucesso.");
-    await Game.destroy({
-      where: {},
-    });
+    await Favorite.drop();
+    // await Game.destroy({
+    //   where: {},
+    // });
     console.log("Todos os jogos foram deletados.");
     await sequelize.sync();
     console.log("Modelos sincronizados com sucesso.");
