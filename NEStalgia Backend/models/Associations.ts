@@ -2,27 +2,49 @@ const associations = () => {
   const { default: Game } = require("./Game");
   const { default: User } = require("./User");
   const { default: Favorite } = require("./Favorite");
+  const { default: Comment } = require("./Comment");
   Game.hasMany(Favorite, {
     foreignKey: "gameId",
     onDelete: "CASCADE",
-    as: "favorites", // A associação será referida como "favorites"
+    as: "favorites",
   });
 
   Favorite.belongsTo(Game, {
     foreignKey: "gameId",
-    as: "Game", // "Game" será acessado diretamente no Favorite
+    as: "Game",
   });
 
-  // A associação entre User e Favorite
   User.hasMany(Favorite, {
     foreignKey: "userId",
     onDelete: "CASCADE",
-    as: "favorites", // A associação será referida como "favorites"
+    as: "favorites",
   });
 
   Favorite.belongsTo(User, {
     foreignKey: "userId",
-    as: "User", // "User" será acessado diretamente no Favorite
+    as: "User",
+  });
+
+  Game.hasMany(Comment, {
+    foreignKey: "gameId",
+    onDelete: "CASCADE",
+    as: "comments",
+  });
+
+  Comment.belongsTo(Game, {
+    foreignKey: "gameId",
+    as: "Game",
+  });
+
+  User.hasMany(Comment, {
+    foreignKey: "userId",
+    onDelete: "CASCADE",
+    as: "comments",
+  });
+
+  Comment.belongsTo(User, {
+    foreignKey: "userId",
+    as: "User",
   });
 };
 
