@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jsnes Test</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #111;
+        color: white;
+      }
+      canvas {
+        border: 2px solid white;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Testar ROM com jsnes</h1>
+    <input type="file" id="romUpload" accept=".nes" />
+    <canvas id="nesCanvas" width="256" height="240"></canvas>
+
+    <!-- Carregar jsnes via CDN -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jsnes/1.2.1/jsnes.min.js"
+      integrity="sha512-fT5fEB17pBMh7ZMRebBOq3R0peiXrrR3dqtzjlyeJIr8dePX+cOXplCfXyBtSOUmkmi6U+U/fcXuDsEPBXgKgw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      // Função para converter ArrayBuffer para string binária
+      function arrayBufferToBinaryString(buffer) {
+        let binary = "";
+        const bytes = new Uint8Array(buffer);
+        const len = bytes.byteLength;
+        for (let i = 0; i < len; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        return binary;
+      }
+
+      // Inicializar jsnes
+      const nes = new jsnes.NES({
+        onFrame: (frameBuffer) => {
+          const canvas = document.getElementById("nesCanvas");
+          const ctx = canvas.getContext("2d");
+          const imageData = ctx.getImageData(0, 0, 256, 240);
+
+          for (let i = 0; i < 256 * 240; i++) {
+            const i3 = i * 3;
+            const i4 = i * 4;
+            imageData.data[i4] = frameBuffer[i3];
+            imageData.data[i4 + 1] = frameBuffer[i3 + 1];
+            imageData.data[i4 + 2] = frameBuffer[i3 + 2];
+            imageData.data[i4 + 3] = 255; // Alpha
+          }
+
+          ctx.putImageData(imageData, 0, 0);
+        },
+        onStatusUpdate: console.log,
+        emulateSound: false,
+      });
+
+      // Função para chamar o frame da emulação
+      function runEmulator() {
+        nes.frame();
+        requestAnimationFrame(runEmulator);
+      }
+
+      // Evento de upload da ROM
+      document
+        .getElementById("romUpload")
+        .addEventListener("change", function (event) {
+          const file = event.target.files[0];
+          if (!file) return;
+
+          const reader = new FileReader();
+          reader.onload = function () {
+            const arrayBuffer = reader.result;
+            // Converter para string binária (cada caractere representa um byte)
+            const binaryROM = arrayBufferToBinaryString(arrayBuffer);
+
+            // Criar Uint8Array para verificação do cabeçalho
+            const romData = new Uint8Array(arrayBuffer);
+            console.log("Verificando cabeçalho da ROM:", romData.slice(0, 4));
+
+            // Verificar cabeçalho da ROM NES (0x4E 0x45 0x53 0x1A)
+            if (
+              romData[0] === 0x4e &&
+              romData[1] === 0x45 &&
+              romData[2] === 0x53 &&
+              romData[3] === 0x1a
+            ) {
+              console.log("ROM válida detectada!");
+              try {
+                nes.loadROM(binaryROM);
+                runEmulator();
+              } catch (error) {
+                console.error("Erro ao carregar ROM:", error);
+              }
+            } else {
+              console.error("Arquivo não é uma ROM NES válida.");
+              alert("A ROM não é válida. Por favor, verifique o arquivo.");
+            }
+          };
+          reader.readAsArrayBuffer(file);
+        });
+    </script>
+  </body>
+</html>
